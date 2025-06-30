@@ -7,6 +7,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class RenterDataLoader {
 
@@ -17,47 +19,55 @@ public class RenterDataLoader {
              Workbook workbook = new XSSFWorkbook(is)) {
 
             Sheet sheet = workbook.getSheetAt(0); // Use first sheet
+
+            // Read header row and map column names to indexes
+            Row headerRow = sheet.getRow(0);
+            if (headerRow == null) {
+                throw new IllegalStateException("Sheet is missing header row");
+            }
+
+            Map<String, Integer> colMap = new HashMap<>();
+            for (Cell cell : headerRow) {
+                String colName = cell.getStringCellValue().trim();
+                colMap.put(colName, cell.getColumnIndex());
+            }
+
             for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
                 Row row = sheet.getRow(rowIndex);
                 if (row == null) continue;
 
-                // Extract and process tenant names
-                String fullNames = getString(row, 0);
-                String frauLastName = getString(row, 1).toLowerCase();
-                String herrLastName = getString(row, 2).toLowerCase();
+                String fullNames = getString(row, getRequiredColumnIndex(colMap, "Mieter"));
+                String woman = getString(row, getRequiredColumnIndex(colMap, "Frau"));
+                String man = getString(row, getRequiredColumnIndex(colMap, "Herr"));
 
                 List<Tenant> tenants = new ArrayList<>();
-                for (String name : fullNames.split(" und ")) {
-                    name = name.trim();
-                    String lastName = name.substring(name.lastIndexOf(' ') + 1).toLowerCase();
-
-                    String gender = "unknown";
-                    if (!frauLastName.isBlank() && lastName.equals(frauLastName)) gender = "woman";
-                    else if (!herrLastName.isBlank() && lastName.equals(herrLastName)) gender = "man";
-
-                    tenants.add(new Tenant(name, gender));
+                if (!woman.isBlank()) {
+                    tenants.add(new Tenant(fullNames, woman));
+                }
+                if (!man.isBlank()) {
+                    tenants.add(new Tenant(fullNames, man));
                 }
 
                 Apartment apartment = new Apartment(
-                        getDouble(row, 3),  // Wfl.m2
-                        getString(row, 4),  // Balkon
-                        getString(row, 5),  // Lage
-                        getString(row, 6),  // Straße
-                        getString(row, 7),  // Zustand
-                        getString(row, 8)   // Beheizg.
+                        getDouble(row, getRequiredColumnIndex(colMap, "Wfl.m2")),  // Wohnfläche
+                        getString(row, getRequiredColumnIndex(colMap, "Balkon")),   // Balkon
+                        getString(row, getRequiredColumnIndex(colMap, "Lage")),    // Lage
+                        getString(row, getRequiredColumnIndex(colMap, "Straße")),  // Straße
+                        getString(row, getRequiredColumnIndex(colMap, "Zustand")), // Zustand
+                        getString(row, getRequiredColumnIndex(colMap, "Beheizung")) // Beheizg.
                 );
 
-                String suspended = getString(row, 9);
+                String suspended = getString(row, getRequiredColumnIndex(colMap, "Ausgesetzt"));
 
                 PreviousRentIncrease increase = new PreviousRentIncrease(
-                        (int) getDouble(row, 10), // Jahr alt
-                        (int) getDouble(row, 11), // Monat alt
-                        getDouble(row, 12),       // Miete alt
-                        getDouble(row, 13)        // €/m2 alt
+                        (int) getDouble(row, getRequiredColumnIndex(colMap, "Jahr alt")),
+                        (int) getDouble(row, getRequiredColumnIndex(colMap, "Monat alt")),
+                        getDouble(row, getRequiredColumnIndex(colMap, "Miete alt")),
+                        getDouble(row, getRequiredColumnIndex(colMap, "€/m2 alt"))
                 );
 
-                double operatingCosts = getDouble(row, 14);
-                double heatingCosts = getDouble(row, 15);
+                double operatingCosts = getDouble(row, getRequiredColumnIndex(colMap, "BK Voraus"));
+                double heatingCosts = getDouble(row, getRequiredColumnIndex(colMap, "HK Voraus"));
 
                 Renter renter = new Renter(tenants, apartment, suspended, increase, operatingCosts, heatingCosts);
                 renters.add(renter);
@@ -69,6 +79,15 @@ public class RenterDataLoader {
 
         return renters;
     }
+
+    private static int getRequiredColumnIndex(Map<String, Integer> colMap, String colName) {
+        Integer idx = colMap.get(colName);
+        if (idx == null) {
+            throw new IllegalStateException("Missing required column: " + colName);
+        }
+        return idx;
+    }
+
 
     private static String getString(Row row, int col) {
         Cell cell = row.getCell(col);
