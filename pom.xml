@@ -20,5 +20,10 @@
             <artifactId>commons-csv</artifactId>
             <version>1.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.4.1</version> <!-- use latest stable version -->
+        </dependency>
     </dependencies>
 </project>
