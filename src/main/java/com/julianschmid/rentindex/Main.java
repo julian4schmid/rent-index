@@ -1,7 +1,7 @@
 package com.julianschmid.rentindex;
 
-import com.julianschmid.rentindex.util.VpiDataLoader;
 import com.julianschmid.rentindex.model.VpiRecord;
+import com.julianschmid.rentindex.util.VpiDataLoader;
 
 import java.io.IOException;
 import java.util.List;

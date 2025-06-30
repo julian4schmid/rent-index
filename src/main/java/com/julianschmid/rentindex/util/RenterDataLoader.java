@@ -1,14 +1,17 @@
 package com.julianschmid.rentindex.util;
 
-import com.julianschmid.rentindex.model.*;
+import com.julianschmid.rentindex.model.Apartment;
+import com.julianschmid.rentindex.model.PreviousRentAdjustment;
+import com.julianschmid.rentindex.model.Renter;
+import com.julianschmid.rentindex.model.Tenant;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class RenterDataLoader {
 
