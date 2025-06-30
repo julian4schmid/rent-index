@@ -3,8 +3,9 @@ package com.julianschmid.rentindex.model;
 import java.util.List;
 
 public class Renter {
-    private final List<Person> renters;
+    private final List<Tenant> tenants;
     private final Apartment apartment;
+    private final String suspended;
     private final PreviousRentIncrease previousIncrease;
 
     private final double operatingCosts;
@@ -12,25 +13,31 @@ public class Renter {
 
     private double newRent;
 
-    public Renter(List<Person> renters,
+    public Renter(List<Tenant> tenants,
                   Apartment apartment,
+                  String suspended,
                   PreviousRentIncrease previousIncrease,
                   double operatingCosts,
                   double heatingCosts) {
-        this.renters = renters;
+        this.tenants = tenants;
         this.apartment = apartment;
+        this.suspended = suspended;
         this.previousIncrease = previousIncrease;
         this.operatingCosts = operatingCosts;
         this.heatingCosts = heatingCosts;
         this.newRent = previousIncrease.rent(); // default to last known
     }
 
-    public List<Person> getRenters() {
-        return renters;
+    public List<Tenant> getTenants() {
+        return tenants;
     }
 
     public Apartment getApartment() {
         return apartment;
+    }
+
+    public String getSuspended() {
+        return suspended;
     }
 
     public PreviousRentIncrease getPreviousIncrease() {
