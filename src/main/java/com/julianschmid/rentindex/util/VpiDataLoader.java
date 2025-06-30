@@ -43,7 +43,7 @@ public final class VpiDataLoader {
         try (
                 InputStream is = VpiDataLoader.class.getClassLoader().getResourceAsStream(csvResourcePath);
                 InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
-                CSVParser parser = new CSVParser(reader, csvFormat);
+                CSVParser parser = new CSVParser(reader, csvFormat)
         ) {
             for (CSVRecord csvRecord : parser) {
                 if ("%".equals(csvRecord.get(VALUE_UNIT_COLUMN)) || "...".equals(csvRecord.get(VALUE_COLUMN))) {
