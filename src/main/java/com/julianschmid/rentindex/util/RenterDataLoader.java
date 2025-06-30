@@ -59,7 +59,7 @@ public class RenterDataLoader {
 
                 String suspended = getString(row, getRequiredColumnIndex(colMap, "Ausgesetzt"));
 
-                PreviousRentIncrease increase = new PreviousRentIncrease(
+                PreviousRentAdjustment previous = new PreviousRentAdjustment(
                         (int) getDouble(row, getRequiredColumnIndex(colMap, "Jahr alt")),
                         (int) getDouble(row, getRequiredColumnIndex(colMap, "Monat alt")),
                         getDouble(row, getRequiredColumnIndex(colMap, "Miete alt")),
@@ -69,7 +69,7 @@ public class RenterDataLoader {
                 double operatingCosts = getDouble(row, getRequiredColumnIndex(colMap, "BK Voraus"));
                 double heatingCosts = getDouble(row, getRequiredColumnIndex(colMap, "HK Voraus"));
 
-                Renter renter = new Renter(tenants, apartment, suspended, increase, operatingCosts, heatingCosts);
+                Renter renter = new Renter(tenants, apartment, suspended, previous, operatingCosts, heatingCosts);
                 renters.add(renter);
             }
 

@@ -6,7 +6,7 @@ public class Renter {
     private final List<Tenant> tenants;
     private final Apartment apartment;
     private final String suspended;
-    private final PreviousRentIncrease previousIncrease;
+    private final PreviousRentAdjustment previousIncrease;
 
     private final double operatingCosts;
     private final double heatingCosts;
@@ -16,7 +16,7 @@ public class Renter {
     public Renter(List<Tenant> tenants,
                   Apartment apartment,
                   String suspended,
-                  PreviousRentIncrease previousIncrease,
+                  PreviousRentAdjustment previousIncrease,
                   double operatingCosts,
                   double heatingCosts) {
         this.tenants = tenants;
@@ -40,7 +40,7 @@ public class Renter {
         return suspended;
     }
 
-    public PreviousRentIncrease getPreviousIncrease() {
+    public PreviousRentAdjustment getPreviousIncrease() {
         return previousIncrease;
     }
 
