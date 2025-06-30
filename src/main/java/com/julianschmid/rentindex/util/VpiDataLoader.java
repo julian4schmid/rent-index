@@ -35,10 +35,15 @@ public final class VpiDataLoader {
     public static List<VpiRecord> loadSortedVpiRecords(String csvResourcePath) throws IOException {
         List<VpiRecord> records = new ArrayList<>();
 
+        CSVFormat csvFormat = CSVFormat.Builder.create()
+                .setDelimiter(SEPARATOR)
+                .setHeader()
+                .setSkipHeaderRecord(true)
+                .build();
         try (
                 InputStream is = VpiDataLoader.class.getClassLoader().getResourceAsStream(csvResourcePath);
                 InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
-                CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withDelimiter(SEPARATOR).withFirstRecordAsHeader())
+                CSVParser parser = new CSVParser(reader, csvFormat);
         ) {
             for (CSVRecord csvRecord : parser) {
                 if ("%".equals(csvRecord.get(VALUE_UNIT_COLUMN)) || "...".equals(csvRecord.get(VALUE_COLUMN))) {
