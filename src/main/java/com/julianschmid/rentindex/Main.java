@@ -3,7 +3,6 @@ package com.julianschmid.rentindex;
 import com.julianschmid.rentindex.model.*;
 import com.julianschmid.rentindex.util.*;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Main {
@@ -13,7 +12,7 @@ public class Main {
             List<VpiRecord> records = VpiDataLoader.loadSortedVpiRecords("vpi.csv");
             records.forEach(System.out::println);
             */
-        List<Renter> renters = RenterDataLoader.loadRenters("Indexmieten_Übersicht.xlsx");
+        List<Renter> renters = RenterDataLoader.loadRenters("real/Indexmieten_Übersicht.xlsx");
         renters.forEach(System.out::println);
 
     }
