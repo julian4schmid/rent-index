@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class RenterDataLoader {
 
-    public static List<Renter> loadRenters(String fileName) {
+    public static List<Renter> loadRenters(String fileName) throws IOException{
         List<Renter> renters = new ArrayList<>();
 
         try (InputStream is = RenterDataLoader.class.getClassLoader().getResourceAsStream(fileName);
@@ -77,8 +77,6 @@ public class RenterDataLoader {
                 renters.add(renter);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         return renters;

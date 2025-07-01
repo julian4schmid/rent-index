@@ -32,7 +32,7 @@ public final class VpiDataLoader {
         // Prevent instantiation
     }
 
-    public static List<VpiRecord> loadSortedVpiRecords(String csvResourcePath) {
+    public static List<VpiRecord> loadSortedVpiRecords(String csvResourcePath) throws IOException {
         List<VpiRecord> records = new ArrayList<>();
 
         CSVFormat csvFormat = CSVFormat.Builder.create()
@@ -56,8 +56,6 @@ public final class VpiDataLoader {
 
                 records.add(new VpiRecord(year, month, value));
             }
-        }catch (Exception e) {
-            e.printStackTrace();
         }
 
         return records.stream()
