@@ -7,6 +7,7 @@ import com.julianschmid.rentindex.model.Tenant;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class RenterDataLoader {
 
             for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
                 Row row = sheet.getRow(rowIndex);
-                if (row == null) continue;
+                if (row == null || row.getCell(0) == null || row.getCell(0).getCellType() == CellType.BLANK) continue;
 
                 String fullNames = getString(row, getRequiredColumnIndex(colMap, "Mieter"));
                 String woman = getString(row, getRequiredColumnIndex(colMap, "Frau"));
@@ -64,7 +65,7 @@ public class RenterDataLoader {
 
                 PreviousRentAdjustment previous = new PreviousRentAdjustment(
                         (int) getDouble(row, getRequiredColumnIndex(colMap, "Jahr alt")),
-                        (int) getDouble(row, getRequiredColumnIndex(colMap, "Monat alt")),
+                        getString(row, getRequiredColumnIndex(colMap, "Monat alt")),
                         getDouble(row, getRequiredColumnIndex(colMap, "Miete alt")),
                         getDouble(row, getRequiredColumnIndex(colMap, "€/m2 alt"))
                 );

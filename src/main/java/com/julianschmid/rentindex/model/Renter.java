@@ -60,4 +60,16 @@ public class Renter {
         this.newRent = newRent;
     }
 
+    @Override
+    public String toString() {
+        return "Renter{" +
+                "tenants=" + tenants +
+                ", apartment=" + apartment +
+                ", suspended='" + suspended + '\'' +
+                ", previousIncrease=" + previousIncrease +
+                ", operatingCosts=" + operatingCosts +
+                ", heatingCosts=" + heatingCosts +
+                ", newRent=" + newRent +
+                '}';
+    }
 }
