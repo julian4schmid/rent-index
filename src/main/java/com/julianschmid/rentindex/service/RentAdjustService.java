@@ -6,7 +6,7 @@ import com.julianschmid.rentindex.util.*;
 import java.util.List;
 import java.util.Properties;
 
-public final class RentAdjuster {
+public final class RentAdjustService {
 
     public boolean adjustmentReasonable(Renter renter) {
         VpiRecord oldVpi = renter.getRentAdjustment().getOldVpi();
@@ -64,7 +64,20 @@ public final class RentAdjuster {
 
     public void adjustRent(Renter renter) {
         if (adjustmentReasonable(renter)) {
-            renter.getRentAdjustment().setWillAdjustRent(true);
+            RentAdjustment adjustment = renter.getRentAdjustment();
+            adjustment.setWillAdjustRent(true);
+
+            double oldVpiVal = adjustment.getOldVpi().value();
+            double newVpiVal = adjustment.getNewVpi().value();
+            double newRentPerSqm = renter.getPreviousAdjustment().rentPerSqm();
+            newRentPerSqm *= newVpiVal / oldVpiVal;
+            newRentPerSqm = Math.min(newRentPerSqm, adjustment.getSelfSetRentLimit());
+
+            adjustment.setNewRentPerSqm(newRentPerSqm);
+            adjustment.setNewRent(newRentPerSqm * renter.getApartment().sqm());
+            adjustment.setRentDifference(adjustment.getNewRent() - renter.getPreviousAdjustment().rent());
+            adjustment.setPercentIncrease(MathUtil.formatPercentChange(
+                    adjustment.getNewRent() / renter.getPreviousAdjustment().rent()));
         }
     }
 
