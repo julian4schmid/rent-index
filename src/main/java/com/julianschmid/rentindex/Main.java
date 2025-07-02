@@ -2,8 +2,7 @@ package com.julianschmid.rentindex;
 
 import com.julianschmid.rentindex.api.VpiDownloader;
 import com.julianschmid.rentindex.model.*;
-import com.julianschmid.rentindex.service.RenterDataLoader;
-import com.julianschmid.rentindex.service.VpiDataLoader;
+import com.julianschmid.rentindex.service.*;
 import com.julianschmid.rentindex.util.*;
 
 import java.util.Properties;
@@ -42,6 +41,7 @@ public class Main {
         try {
             List<VpiRecord> records = VpiDataLoader.loadSortedVpiRecords("download/vpi.csv");
             List<Renter> renters = RenterDataLoader.loadRenters(path + "Indexmieten_Übersicht.xlsx");
+            VpiService.addVpiToRenters(renters, records);
 
             records.forEach(System.out::println);
             renters.forEach(System.out::println);

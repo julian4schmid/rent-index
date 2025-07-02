@@ -1,6 +1,7 @@
 package com.julianschmid.rentindex.service;
 
 import com.julianschmid.rentindex.model.VpiRecord;
+import com.julianschmid.rentindex.util.DateUtil;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -17,10 +18,7 @@ import java.util.stream.Collectors;
 
 public final class VpiDataLoader {
 
-    private static final List<String> MONTH_ORDER = Arrays.asList(
-            "Januar", "Februar", "März", "April", "Mai", "Juni",
-            "Juli", "August", "September", "Oktober", "November", "Dezember"
-    );
+    private static final List<String> MONTH_ORDER = DateUtil.MONTH_ORDER;
 
     private static final char SEPARATOR = ';';
     private static final String VALUE_UNIT_COLUMN = "value_unit";

@@ -6,12 +6,12 @@ public class Renter {
     private final List<Tenant> tenants;
     private final Apartment apartment;
     private final String suspended;
-    private final PreviousRentAdjustment previousIncrease;
+    private final PreviousRentAdjustment previousAdjustment;
 
     private final double operatingCosts;
     private final double heatingCosts;
 
-    private double newRent;
+    private RentAdjustment rentAdjustment;
 
     public Renter(List<Tenant> tenants,
                   Apartment apartment,
@@ -22,10 +22,9 @@ public class Renter {
         this.tenants = tenants;
         this.apartment = apartment;
         this.suspended = suspended;
-        this.previousIncrease = previousIncrease;
+        this.previousAdjustment = previousIncrease;
         this.operatingCosts = operatingCosts;
         this.heatingCosts = heatingCosts;
-        this.newRent = previousIncrease.rent(); // default to last known
     }
 
     public List<Tenant> getTenants() {
@@ -40,8 +39,8 @@ public class Renter {
         return suspended;
     }
 
-    public PreviousRentAdjustment getPreviousIncrease() {
-        return previousIncrease;
+    public PreviousRentAdjustment getPreviousAdjustment() {
+        return previousAdjustment;
     }
 
     public double getOperatingCosts() {
@@ -52,12 +51,8 @@ public class Renter {
         return heatingCosts;
     }
 
-    public double getNewRent() {
-        return newRent;
-    }
-
-    public void setNewRent(double newRent) {
-        this.newRent = newRent;
+    public void setRentAdjustment(RentAdjustment rentAdjustment) {
+        this.rentAdjustment = rentAdjustment;
     }
 
     @Override
@@ -66,10 +61,9 @@ public class Renter {
                 "tenants=" + tenants +
                 ", apartment=" + apartment +
                 ", suspended='" + suspended + '\'' +
-                ", previousIncrease=" + previousIncrease +
+                ", previousAdjustment=" + previousAdjustment +
                 ", operatingCosts=" + operatingCosts +
                 ", heatingCosts=" + heatingCosts +
-                ", newRent=" + newRent +
                 '}';
     }
 }
