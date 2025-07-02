@@ -55,6 +55,10 @@ public class Renter {
         this.rentAdjustment = rentAdjustment;
     }
 
+    public RentAdjustment getRentAdjustment() {
+        return rentAdjustment;
+    }
+
     @Override
     public String toString() {
         return "Renter{" +
@@ -64,6 +68,7 @@ public class Renter {
                 ", previousAdjustment=" + previousAdjustment +
                 ", operatingCosts=" + operatingCosts +
                 ", heatingCosts=" + heatingCosts +
+                ", rentAdjustment=" + rentAdjustment +
                 '}';
     }
 }

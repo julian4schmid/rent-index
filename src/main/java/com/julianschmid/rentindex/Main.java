@@ -13,10 +13,10 @@ public class Main {
     public static void main(String[] args) {
 
         // VPI data up to date?
-        boolean upToDate = false;
+        boolean upToDate = true;
 
         // check if real data is available
-        boolean realData = ResourceUtil.folderExists("real");
+        boolean realData = ResourceUtil.resourceFolderExists("real");
         // use sample data if no real data is available
         String path = realData ? "real/" : "sample/";
 

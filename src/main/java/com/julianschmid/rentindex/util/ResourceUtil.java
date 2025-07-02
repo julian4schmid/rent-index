@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public final class ResourceUtil {
-    public static boolean folderExists(String folderName) {
+    public static boolean resourceFolderExists(String folderName) {
         URL url = ResourceUtil.class.getClassLoader().getResource(folderName);
         if (url == null) return false;
         try {

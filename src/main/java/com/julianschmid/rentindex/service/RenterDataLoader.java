@@ -140,6 +140,4 @@ public final class RenterDataLoader {
                 return 0.0;
         }
     }
-
-
 }

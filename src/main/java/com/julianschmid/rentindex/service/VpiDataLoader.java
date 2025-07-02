@@ -27,7 +27,6 @@ public final class VpiDataLoader {
     private static final String MONTH_COLUMN = "1_variable_attribute_label";
 
     private VpiDataLoader() {
-        // Prevent instantiation
     }
 
     public static List<VpiRecord> loadSortedVpiRecords(String csvResourcePath) throws IOException {
