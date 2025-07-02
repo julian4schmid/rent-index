@@ -1,4 +1,4 @@
-package com.julianschmid.rentindex.util;
+package com.julianschmid.rentindex.api;
 
 import java.io.*;
 import java.net.URI;

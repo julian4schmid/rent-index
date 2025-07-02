@@ -1,4 +1,4 @@
-package com.julianschmid.rentindex.util;
+package com.julianschmid.rentindex.service;
 
 import com.julianschmid.rentindex.model.Apartment;
 import com.julianschmid.rentindex.model.PreviousRentAdjustment;

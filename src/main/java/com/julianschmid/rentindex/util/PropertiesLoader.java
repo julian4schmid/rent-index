@@ -4,9 +4,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesLoader {
-    public static Properties getProperties(String fileName) {
+    public static Properties getProperties(String path, String fileName) {
         try (InputStream input = PropertiesLoader.class.getClassLoader()
-                .getResourceAsStream("real/" + fileName)) {
+                .getResourceAsStream(path + fileName)) {
             if (input == null) throw new IllegalStateException("file not found");
 
             Properties prop = new Properties();
