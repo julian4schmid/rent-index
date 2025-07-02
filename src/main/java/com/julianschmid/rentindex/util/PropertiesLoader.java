@@ -3,7 +3,7 @@ package com.julianschmid.rentindex.util;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class PropertiesLoader {
+public final class PropertiesLoader {
     public static Properties getProperties(String path, String fileName) {
         try (InputStream input = PropertiesLoader.class.getClassLoader()
                 .getResourceAsStream(path + fileName)) {

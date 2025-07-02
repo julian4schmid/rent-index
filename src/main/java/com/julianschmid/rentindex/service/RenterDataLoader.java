@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RenterDataLoader {
+public final class RenterDataLoader {
+
+    private RenterDataLoader() {}
 
     public static List<Renter> loadRenters(String fileName) throws IOException{
         List<Renter> renters = new ArrayList<>();
