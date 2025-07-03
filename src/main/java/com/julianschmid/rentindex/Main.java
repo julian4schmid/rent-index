@@ -41,6 +41,7 @@ public class Main {
             List<VpiRecord> records = VpiDataLoader.loadSortedVpiRecords("download/vpi.csv");
             List<Renter> renters = RenterDataLoader.loadRenters(overview);
             VpiService.addVpiToRenters(renters, records);
+            RentAdjustService.adjustRent(renters);
             RenterExcelWriter.createNewOverview(overview, renters);
 
             records.forEach(System.out::println);

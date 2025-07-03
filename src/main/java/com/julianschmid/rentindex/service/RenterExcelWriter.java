@@ -50,9 +50,12 @@ public class RenterExcelWriter {
                     ExcelUtil.setValue(row, "Jahr neu", colMap, adjustment.getNewVpi().year());
                     ExcelUtil.setValue(row, "Monat neu", colMap, adjustment.getNewVpi().month());
                     ExcelUtil.setValue(row, "€", colMap, adjustment.getRentDifference());
+                    ExcelUtil.setValue(row, "%", colMap, adjustment.getPercentIncrease());
                     ExcelUtil.setValue(row, "Miete neu", colMap, adjustment.getNewRent());
-                    ExcelUtil.setValue(row, "€", colMap, adjustment.getNewRentPerSqm());
+                    ExcelUtil.setValue(row, "€/m2 neu", colMap, adjustment.getNewRentPerSqm());
+                } else {
 
+                    ExcelUtil.setValue(row, "Grund", colMap, adjustment.getReason());
                 }
             }
 

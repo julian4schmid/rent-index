@@ -15,8 +15,9 @@ public class RentAdjustment {
     private final String percentPossible;
     private String percentIncrease;
     private double NewRentPerSqm;
-    private double newRent;
+    private int newRent;
     private double rentDifference;
+    private String reason;
 
     public RentAdjustment(VpiRecord oldVpi, VpiRecord newVpi) {
         this.oldVpi = oldVpi;
@@ -60,7 +61,7 @@ public class RentAdjustment {
         NewRentPerSqm = newRentPerSqm;
     }
 
-    public void setNewRent(double newRent) {
+    public void setNewRent(int newRent) {
         this.newRent = newRent;
     }
 
@@ -84,6 +85,14 @@ public class RentAdjustment {
         this.rentDifference = rentDifference;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     @Override
     public String toString() {
         return "RentAdjustment{" +
@@ -95,6 +104,8 @@ public class RentAdjustment {
                 ", percentIncrease='" + percentIncrease + '\'' +
                 ", NewRentPerSqm=" + NewRentPerSqm +
                 ", newRent=" + newRent +
+                ", rentDifference=" + rentDifference +
+                ", reason='" + reason + '\'' +
                 '}';
     }
 

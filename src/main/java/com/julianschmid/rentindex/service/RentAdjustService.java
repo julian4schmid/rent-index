@@ -8,43 +8,50 @@ import java.util.Properties;
 
 public final class RentAdjustService {
 
-    public boolean adjustmentReasonable(Renter renter) {
+    public static boolean adjustmentReasonable(Renter renter) {
         VpiRecord oldVpi = renter.getRentAdjustment().getOldVpi();
         VpiRecord newVpi = renter.getRentAdjustment().getNewVpi();
         final List<String> MONTH_ORDER = DateUtil.MONTH_ORDER;
         int oldMonth = MONTH_ORDER.indexOf(oldVpi.month());
         int newMonth = MONTH_ORDER.indexOf(newVpi.month());
+        RentAdjustment adjustment = renter.getRentAdjustment();
 
         // last adjustment at least 12 months ago
         if (oldVpi.year() >= newVpi.year()
                 || (oldVpi.year() + 1 == newVpi.year() && oldMonth > newMonth)) {
+            adjustment.setReason("< 12 Monate");
             return false;
         }
 
         // adjust always if flagged as MAX
-        if (!renter.getSuspended().equals("MAX") && oldVpi.value() < newVpi.value()) {
+        if (renter.getSuspended().equals("MAX") && oldVpi.value() < newVpi.value()) {
             renter.getRentAdjustment().setSelfSetRentLimit(1000);
             return true;
         }
 
         // rent adjustment suspended
         if (!renter.getSuspended().isEmpty()) {
+            adjustment.setReason("ausgesetzt");
             return false;
         }
 
         // at least a positive adjustment of 2%
+        if (newVpi.value() / oldVpi.value() < 1.02) {
+            adjustment.setReason("< 2 %");
+            return false;
+        }
+
+        // at least a positive adjustment of 2% considering the limit
         double limit = calculateSelfSetRentLimit(renter);
-        if (newVpi.value() / oldVpi.value() < 1.02 || limit / renter.getPreviousAdjustment().rentPerSqm() < 1.02) {
+        if (limit / renter.getPreviousAdjustment().rentPerSqm() < 1.02) {
+            adjustment.setReason("limit");
             return false;
         }
 
         return true;
     }
 
-    public double calculateSelfSetRentLimit(Renter renter) {
-        // use real data if available
-        String path = ResourceUtil.getDataPath();
-
+    public static double calculateSelfSetRentLimit(Renter renter) {
         Apartment apartment = renter.getApartment();
         Properties props = PropertiesLoader.getProperties("limits.properties");
 
@@ -59,7 +66,8 @@ public final class RentAdjustService {
         return limit;
     }
 
-    public void adjustRent(Renter renter) {
+
+    public static void adjustRent(Renter renter) {
         if (adjustmentReasonable(renter)) {
             RentAdjustment adjustment = renter.getRentAdjustment();
             adjustment.setWillAdjustRent(true);
@@ -70,11 +78,17 @@ public final class RentAdjustService {
             newRentPerSqm *= newVpiVal / oldVpiVal;
             newRentPerSqm = Math.min(newRentPerSqm, adjustment.getSelfSetRentLimit());
 
-            adjustment.setNewRentPerSqm(newRentPerSqm);
-            adjustment.setNewRent(newRentPerSqm * renter.getApartment().sqm());
+            adjustment.setNewRentPerSqm(MathUtil.roundWithDecimals(newRentPerSqm, 2));
+            adjustment.setNewRent((int) Math.floor(newRentPerSqm * renter.getApartment().sqm()));
             adjustment.setRentDifference(adjustment.getNewRent() - renter.getPreviousAdjustment().rent());
             adjustment.setPercentIncrease(MathUtil.formatPercentChange(
                     adjustment.getNewRent() / renter.getPreviousAdjustment().rent()));
+        }
+    }
+
+    public static void adjustRent(List<Renter> renters) {
+        for (Renter renter : renters) {
+            adjustRent(renter);
         }
     }
 

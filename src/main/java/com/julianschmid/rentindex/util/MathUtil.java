@@ -10,6 +10,15 @@ public final class MathUtil {
     }
 
     public static String formatPercentChange(double val) {
-        return calculateRelativeChange(val) * 100 + " %";
+        double percent = calculateRelativeChange(val) * 100;
+        return convertNumberToString(percent) + " %";
+    }
+
+    public static double roundWithDecimals(double val, int decimals) {
+        return Math.round(val * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    }
+
+    public static String convertNumberToString(double val) {
+        return String.format("%.2f", val);
     }
 }
