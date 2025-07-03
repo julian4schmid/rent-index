@@ -51,8 +51,6 @@ public class RenterExcelWriter {
                     ExcelUtil.setValue(row, "€", colMap, adjustment.getNewRentPerSqm());
 
                 }
-
-
             }
 
             // Write updated workbook to a new file

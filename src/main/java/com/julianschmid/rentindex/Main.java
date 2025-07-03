@@ -16,9 +16,9 @@ public class Main {
         boolean upToDate = true;
 
         // check if real data is available
-        boolean realData = ResourceUtil.resourceFolderExists("real");
+        boolean realData = ResourceUtil.realDataAvailable();
         // use sample data if no real data is available
-        String path = realData ? "real/" : "sample/";
+        String path = ResourceUtil.getDataPath();
 
         // Download VPI data if API token is available and data
         if (realData && !upToDate) {

@@ -42,11 +42,8 @@ public final class RentAdjustService {
     }
 
     public double calculateSelfSetRentLimit(Renter renter) {
-        String path = "sample/";
         // use real data if available
-        if (ResourceUtil.resourceFolderExists("real/")) {
-            path = "real/";
-        }
+        String path = ResourceUtil.getDataPath();
 
         Apartment apartment = renter.getApartment();
         Properties props = PropertiesLoader.getProperties(path, "limits.properties");
