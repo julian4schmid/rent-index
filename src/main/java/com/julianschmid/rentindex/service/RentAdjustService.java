@@ -46,7 +46,7 @@ public final class RentAdjustService {
         String path = ResourceUtil.getDataPath();
 
         Apartment apartment = renter.getApartment();
-        Properties props = PropertiesLoader.getProperties(path, "limits.properties");
+        Properties props = PropertiesLoader.getProperties("limits.properties");
 
         double limit = Double.parseDouble(props.getProperty("building." + apartment.building()));
         limit += Double.parseDouble(props.getProperty(apartment.condition()));

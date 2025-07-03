@@ -18,12 +18,11 @@ public class Main {
         // check if real data is available
         boolean realData = ResourceUtil.realDataAvailable();
         // use sample data if no real data is available
-        String path = ResourceUtil.getDataPath();
 
         // Download VPI data if API token is available and data
         if (realData && !upToDate) {
             try {
-                Properties prop = PropertiesLoader.getProperties(path, "token.properties");
+                Properties prop = PropertiesLoader.getProperties("token.properties");
                 String token = prop.getProperty("token");
 
                 VpiDownloader downloader = new VpiDownloader(token);
@@ -37,11 +36,12 @@ public class Main {
             }
         }
 
-
+        String overview = "Indexmieten_Übersicht.xlsx";
         try {
             List<VpiRecord> records = VpiDataLoader.loadSortedVpiRecords("download/vpi.csv");
-            List<Renter> renters = RenterDataLoader.loadRenters(path + "Indexmieten_Übersicht.xlsx");
+            List<Renter> renters = RenterDataLoader.loadRenters(overview);
             VpiService.addVpiToRenters(renters, records);
+            RenterExcelWriter.createNewOverview(overview, renters);
 
             records.forEach(System.out::println);
             renters.forEach(System.out::println);

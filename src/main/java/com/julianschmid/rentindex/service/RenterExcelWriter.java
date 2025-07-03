@@ -15,8 +15,9 @@ import java.util.*;
 
 
 public class RenterExcelWriter {
-    public static void createNewOverview(String filename, String outputPath, List<Renter> renters) throws IOException {
-        try (InputStream is = RenterDataLoader.class.getClassLoader().getResourceAsStream(filename);
+    public static void createNewOverview(String filename, List<Renter> renters) throws IOException {
+        String path = ResourceUtil.getDataPath();
+        try (InputStream is = RenterDataLoader.class.getClassLoader().getResourceAsStream(path + filename);
              Workbook workbook = new XSSFWorkbook(is)) {
 
             Sheet sheet = workbook.getSheetAt(0);
@@ -32,14 +33,16 @@ public class RenterExcelWriter {
 
                 Renter renter = renters.get(i - 1); // assuming same order
                 if (!renter.getTenants().getFirst().fullName().equals(row.getCell(0).toString())) {
+                    System.out.println(renter);
+                    System.out.println(row);
                     throw new IllegalStateException("Mismatch between renter data and Excel row at index "
                             + row.getRowNum());
                 }
 
                 RentAdjustment adjustment = renter.getRentAdjustment();
 
-                ExcelUtil.setValue(row, "VPIalt", colMap, adjustment.getOldVpi().value());
-                ExcelUtil.setValue(row, "VPIneu", colMap, adjustment.getNewVpi().value());
+                ExcelUtil.setValue(row, "VPI alt", colMap, adjustment.getOldVpi().value());
+                ExcelUtil.setValue(row, "VPI neu", colMap, adjustment.getNewVpi().value());
                 ExcelUtil.setValue(row, "% mgl.", colMap, adjustment.getPercentPossible());
 
                 // if rent will be adjusted
@@ -53,8 +56,10 @@ public class RenterExcelWriter {
                 }
             }
 
-            // Write updated workbook to a new file
-            try (OutputStream os = new FileOutputStream(outputPath + filename + "_neu")) {
+            // Write updated workbook to a new file inside target/path
+            filename = filename.substring(0, filename.length() - 5) + "_neu.xlsx";
+            path = "target/" + path;
+            try (OutputStream os = new FileOutputStream(path + filename)) {
                 workbook.write(os);
             }
         }

@@ -18,10 +18,11 @@ public final class RenterDataLoader {
     private RenterDataLoader() {
     }
 
-    public static List<Renter> loadRenters(String fileName) throws IOException {
+    public static List<Renter> loadRenters(String filename) throws IOException {
+        String path = ResourceUtil.getDataPath();
         List<Renter> renters = new ArrayList<>();
 
-        try (InputStream is = RenterDataLoader.class.getClassLoader().getResourceAsStream(fileName);
+        try (InputStream is = RenterDataLoader.class.getClassLoader().getResourceAsStream(path + filename);
              Workbook workbook = new XSSFWorkbook(is)) {
 
             Sheet sheet = workbook.getSheetAt(0); // Use first sheet
