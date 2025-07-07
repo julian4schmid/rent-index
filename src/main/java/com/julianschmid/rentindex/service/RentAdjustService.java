@@ -53,7 +53,7 @@ public final class RentAdjustService {
 
     public static double calculateSelfSetRentLimit(Renter renter) {
         Apartment apartment = renter.getApartment();
-        Properties props = PropertiesLoader.getProperties("limits.properties");
+        Properties props = PropertiesUtil.getProperties("limits.properties");
 
         double limit = Double.parseDouble(props.getProperty("building." + apartment.building()));
         limit += Double.parseDouble(props.getProperty(apartment.condition()));

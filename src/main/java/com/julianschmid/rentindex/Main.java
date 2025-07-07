@@ -5,6 +5,7 @@ import com.julianschmid.rentindex.model.*;
 import com.julianschmid.rentindex.service.*;
 import com.julianschmid.rentindex.util.*;
 
+import java.util.Map;
 import java.util.Properties;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class Main {
         // Download VPI data if API token is available and data
         if (realData && !upToDate) {
             try {
-                Properties prop = PropertiesLoader.getProperties("token.properties");
+                Properties prop = PropertiesUtil.getProperties("token.properties");
                 String token = prop.getProperty("token");
 
                 VpiDownloader downloader = new VpiDownloader(token);
@@ -36,10 +37,11 @@ public class Main {
             }
         }
 
-        String overview = "Indexmieten_Übersicht.xlsx";
         try {
-            List<VpiRecord> records = VpiDataLoader.loadSortedVpiRecords("download/vpi.csv");
-            List<Renter> renters = RenterDataLoader.loadRenters(overview);
+            String overview = "Indexmieten_Übersicht.xlsx";
+            List<VpiRecord> records = VpiDataLoader.load("download/vpi.csv");
+            Map<String, Building> buildings = BuildingDataLoader.load("buildings.properties");
+            List<Renter> renters = RenterDataLoader.load(overview);
             VpiService.addVpiToRenters(renters, records);
             RentAdjustService.adjustRent(renters);
             RenterExcelWriter.createNewOverview(overview, renters);

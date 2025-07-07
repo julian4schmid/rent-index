@@ -9,7 +9,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public final class RenterDataLoader {
     private RenterDataLoader() {
     }
 
-    public static List<Renter> loadRenters(String filename) throws IOException {
+    public static List<Renter> load(String filename) throws IOException {
         String path = ResourceUtil.getDataPath();
         List<Renter> renters = new ArrayList<>();
 

@@ -3,10 +3,10 @@ package com.julianschmid.rentindex.util;
 import java.io.InputStream;
 import java.util.Properties;
 
-public final class PropertiesLoader {
+public final class PropertiesUtil {
     public static Properties getProperties(String filename) {
         String path = ResourceUtil.getDataPath();
-        try (InputStream input = PropertiesLoader.class.getClassLoader()
+        try (InputStream input = PropertiesUtil.class.getClassLoader()
                 .getResourceAsStream(path + filename)) {
             if (input == null) throw new IllegalStateException("file not found");
 

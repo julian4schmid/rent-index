@@ -29,7 +29,7 @@ public final class VpiDataLoader {
     private VpiDataLoader() {
     }
 
-    public static List<VpiRecord> loadSortedVpiRecords(String csvResourcePath) throws IOException {
+    public static List<VpiRecord> load(String csvResourcePath) throws IOException {
         List<VpiRecord> records = new ArrayList<>();
 
         CSVFormat csvFormat = CSVFormat.Builder.create()
