@@ -41,7 +41,7 @@ public class Main {
             String overview = "Indexmieten_Übersicht.xlsx";
             List<VpiRecord> records = VpiDataLoader.load("download/vpi.csv");
             Map<String, Building> buildings = BuildingDataLoader.load("buildings.properties");
-            List<Renter> renters = RenterDataLoader.load(overview);
+            List<Renter> renters = RenterDataLoader.load(overview, buildings);
             VpiService.addVpiToRenters(renters, records);
             RentAdjustService.adjustRent(renters);
             RenterExcelWriter.createNewOverview(overview, renters);

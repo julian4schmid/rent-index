@@ -17,7 +17,7 @@ public final class RenterDataLoader {
     private RenterDataLoader() {
     }
 
-    public static List<Renter> load(String filename) throws IOException {
+    public static List<Renter> load(String filename, Map<String, Building> buildings) throws IOException {
         String path = ResourceUtil.getDataPath();
         List<Renter> renters = new ArrayList<>();
 
@@ -46,11 +46,12 @@ public final class RenterDataLoader {
                     tenants.add(new Tenant(fullNames, man));
                 }
 
+
                 Apartment apartment = new Apartment(
                         ExcelUtil.getDouble(row, ExcelUtil.getColumnIndex(colMap, "Wfl.m2")),
                         ExcelUtil.getString(row, ExcelUtil.getColumnIndex(colMap, "Balkon")),
                         ExcelUtil.getString(row, ExcelUtil.getColumnIndex(colMap, "Lage")),
-                        ExcelUtil.getString(row, ExcelUtil.getColumnIndex(colMap, "Straße")),
+                        buildings.get(ExcelUtil.getString(row, ExcelUtil.getColumnIndex(colMap, "Straße"))),
                         ExcelUtil.getString(row, ExcelUtil.getColumnIndex(colMap, "Zustand")),
                         ExcelUtil.getString(row, ExcelUtil.getColumnIndex(colMap, "Beheizung"))
                 );
