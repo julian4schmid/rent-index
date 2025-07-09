@@ -2,7 +2,6 @@ package com.julianschmid.rentindex.writer;
 
 
 import com.julianschmid.rentindex.model.*;
-import com.julianschmid.rentindex.loader.RenterDataLoader;
 import com.julianschmid.rentindex.util.*;
 
 import org.apache.poi.ss.usermodel.*;
@@ -18,7 +17,7 @@ import java.util.*;
 public class OverviewWriter {
     public static void createNewOverview(String filename, List<Renter> renters) throws IOException {
         String path = ResourceUtil.getDataPath();
-        try (InputStream is = RenterDataLoader.class.getClassLoader().getResourceAsStream(path + filename);
+        try (InputStream is = OverviewWriter.class.getClassLoader().getResourceAsStream(path + filename);
              Workbook workbook = new XSSFWorkbook(is)) {
 
             Sheet sheet = workbook.getSheetAt(0);
@@ -33,7 +32,7 @@ public class OverviewWriter {
                 if (row == null || row.getCell(0) == null || row.getCell(0).getCellType() == CellType.BLANK) continue;
 
                 Renter renter = renters.get(i - 1); // assuming same order
-                if (!renter.getTenants().getFirst().fullName().equals(row.getCell(0).toString())) {
+                if (!renter.getTenants().getFirst().fullNames().equals(row.getCell(0).toString())) {
                     System.out.println(renter);
                     System.out.println(row);
                     throw new IllegalStateException("Mismatch between renter data and Excel row at index "

@@ -2,9 +2,6 @@ package com.julianschmid.rentindex.model;
 
 import com.julianschmid.rentindex.util.MathUtil;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public class RentAdjustment {
 
     private final VpiRecord oldVpi;
@@ -12,8 +9,8 @@ public class RentAdjustment {
 
     private boolean willAdjustRent;
     private double selfSetRentLimit;
-    private final String percentPossible;
-    private String percentIncrease;
+    private final double percentPossible;
+    private double percentIncrease;
     private double NewRentPerSqm;
     private int newRent;
     private double rentDifference;
@@ -22,7 +19,7 @@ public class RentAdjustment {
     public RentAdjustment(VpiRecord oldVpi, VpiRecord newVpi) {
         this.oldVpi = oldVpi;
         this.newVpi = newVpi;
-        this.percentPossible = MathUtil.formatPercentChange(newVpi.value() / oldVpi.value());
+        this.percentPossible = MathUtil.calculatePercentChange(newVpi.value() / oldVpi.value());
     }
 
     public void setWillAdjustRent(boolean willAdjustRent) {
@@ -65,15 +62,15 @@ public class RentAdjustment {
         this.newRent = newRent;
     }
 
-    public void setPercentIncrease(String percentIncrease) {
+    public void setPercentIncrease(double percentIncrease) {
         this.percentIncrease = percentIncrease;
     }
 
-    public String getPercentPossible() {
+    public double getPercentPossible() {
         return percentPossible;
     }
 
-    public String getPercentIncrease() {
+    public double getPercentIncrease() {
         return percentIncrease;
     }
 

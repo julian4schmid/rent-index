@@ -1,9 +1,6 @@
 package com.julianschmid.rentindex.util;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellValue;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,12 +30,46 @@ public final class ExcelUtil {
         return colMap;
     }
 
-    public static void setValue(Row row, String colName, Map<String, Integer> colMap, String val){
+    public static void setValue(Row row, String colName, Map<String, Integer> colMap, String val) {
         row.createCell(ExcelUtil.getColumnIndex(colMap, colName)).setCellValue(val);
     }
 
-    public static void setValue(Row row, String colName, Map<String, Integer> colMap, double val){
+    public static void setValue(Row row, String colName, Map<String, Integer> colMap, double val) {
         row.createCell(ExcelUtil.getColumnIndex(colMap, colName)).setCellValue(val);
+    }
+
+    public static void setValueByCellRef(Sheet sheet, String cellRef, double val) {
+        getOrCreateCell(sheet, cellRef).setCellValue(val);
+    }
+
+    public static void setValueByCellRef(Sheet sheet, String cellRef, String val) {
+        getOrCreateCell(sheet, cellRef).setCellValue(val);
+    }
+
+    public static Cell getOrCreateCell(Sheet sheet, String cellRef) {
+        int rowIndex = Integer.parseInt(cellRef.replaceAll("[A-Z]+", "")) - 1;
+        String colLetters = cellRef.replaceAll("[0-9]+", "");
+        int colIndex = columnLettersToIndex(colLetters);
+
+        Row row = sheet.getRow(rowIndex);
+        if (row == null) {
+            row = sheet.createRow(rowIndex);
+        }
+
+        Cell cell = row.getCell(colIndex);
+        if (cell == null) {
+            cell = row.createCell(colIndex);
+        }
+
+        return cell;
+    }
+
+    private static int columnLettersToIndex(String letters) {
+        int result = 0;
+        for (char c : letters.toUpperCase().toCharArray()) {
+            result = result * 26 + (c - 'A' + 1);
+        }
+        return result - 1; // zero-based index
     }
 
 

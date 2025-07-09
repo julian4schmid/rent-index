@@ -1,4 +1,4 @@
 package com.julianschmid.rentindex.model;
 
-public record Tenant(String fullName, String salutation) {
+public record Tenant(String fullNames, String salutation, boolean woman) {
 }

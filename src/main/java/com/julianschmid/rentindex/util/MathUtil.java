@@ -4,14 +4,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public final class MathUtil {
-    public static double calculateRelativeChange(double val) {
-        return BigDecimal.valueOf(val - 1)
-                .setScale(4, RoundingMode.FLOOR).doubleValue();
+    public static double calculatePercentChange(double val) {
+        return BigDecimal.valueOf((val - 1) * 100)
+                .setScale(2, RoundingMode.FLOOR).doubleValue();
     }
 
     public static String formatPercentChange(double val) {
-        double percent = calculateRelativeChange(val) * 100;
-        return convertNumberToString(percent) + " %";
+        return convertNumberToString(val).replace(".", ",") + " %";
     }
 
     public static double roundWithDecimals(double val, int decimals) {

@@ -40,10 +40,10 @@ public final class RenterDataLoader {
 
                 List<Tenant> tenants = new ArrayList<>();
                 if (!woman.isBlank()) {
-                    tenants.add(new Tenant(fullNames, woman));
+                    tenants.add(new Tenant(fullNames, woman, true));
                 }
                 if (!man.isBlank()) {
-                    tenants.add(new Tenant(fullNames, man));
+                    tenants.add(new Tenant(fullNames, man, false));
                 }
 
 

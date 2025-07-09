@@ -88,7 +88,7 @@ public final class RentAdjustService {
             adjustment.setNewRentPerSqm(MathUtil.roundWithDecimals(newRentPerSqm, 2));
             adjustment.setNewRent((int) Math.floor(newRentPerSqm * renter.getApartment().sqm()));
             adjustment.setRentDifference(adjustment.getNewRent() - renter.getPreviousAdjustment().rent());
-            adjustment.setPercentIncrease(MathUtil.formatPercentChange(
+            adjustment.setPercentIncrease(MathUtil.calculatePercentChange(
                     adjustment.getNewRent() / renter.getPreviousAdjustment().rent()));
         }
     }
