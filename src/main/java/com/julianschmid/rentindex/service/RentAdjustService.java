@@ -55,11 +55,18 @@ public final class RentAdjustService {
         Apartment apartment = renter.getApartment();
         Properties props = PropertiesUtil.getProperties("limits.properties");
 
+        // basis
         double limit = Double.parseDouble(props.getProperty("building." + apartment.building().id()));
+
+        // modernized
         limit += Double.parseDouble(props.getProperty(apartment.condition()));
+
+        // old heating
         if (apartment.heating().equals("Gasöfen")) {
             limit += Double.parseDouble(props.getProperty("gasofen"));
         }
+
+        // balcony
         limit += Double.parseDouble(props.getProperty("balkon." + apartment.balcony()));
 
         renter.getRentAdjustment().setSelfSetRentLimit(limit);

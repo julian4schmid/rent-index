@@ -1,4 +1,4 @@
-package com.julianschmid.rentindex.service;
+package com.julianschmid.rentindex.loader;
 
 import com.julianschmid.rentindex.model.*;
 import com.julianschmid.rentindex.util.*;

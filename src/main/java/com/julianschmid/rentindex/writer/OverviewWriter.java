@@ -1,7 +1,8 @@
-package com.julianschmid.rentindex.service;
+package com.julianschmid.rentindex.writer;
 
 
 import com.julianschmid.rentindex.model.*;
+import com.julianschmid.rentindex.loader.RenterDataLoader;
 import com.julianschmid.rentindex.util.*;
 
 import org.apache.poi.ss.usermodel.*;
@@ -14,7 +15,7 @@ import java.io.OutputStream;
 import java.util.*;
 
 
-public class RenterExcelWriter {
+public class OverviewWriter {
     public static void createNewOverview(String filename, List<Renter> renters) throws IOException {
         String path = ResourceUtil.getDataPath();
         try (InputStream is = RenterDataLoader.class.getClassLoader().getResourceAsStream(path + filename);

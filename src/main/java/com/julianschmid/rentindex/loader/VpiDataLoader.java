@@ -1,4 +1,4 @@
-package com.julianschmid.rentindex.service;
+package com.julianschmid.rentindex.loader;
 
 import com.julianschmid.rentindex.model.VpiRecord;
 import com.julianschmid.rentindex.util.DateUtil;
@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;

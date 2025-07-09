@@ -1,9 +1,13 @@
 package com.julianschmid.rentindex;
 
 import com.julianschmid.rentindex.api.VpiDownloader;
+import com.julianschmid.rentindex.loader.BuildingDataLoader;
+import com.julianschmid.rentindex.loader.RenterDataLoader;
+import com.julianschmid.rentindex.loader.VpiDataLoader;
 import com.julianschmid.rentindex.model.*;
 import com.julianschmid.rentindex.service.*;
 import com.julianschmid.rentindex.util.*;
+import com.julianschmid.rentindex.writer.OverviewWriter;
 
 import java.util.Map;
 import java.util.Properties;
@@ -44,7 +48,7 @@ public class Main {
             List<Renter> renters = RenterDataLoader.load(overview, buildings);
             VpiService.addVpiToRenters(renters, records);
             RentAdjustService.adjustRent(renters);
-            RenterExcelWriter.createNewOverview(overview, renters);
+            OverviewWriter.createNewOverview(overview, renters);
 
             records.forEach(System.out::println);
             renters.forEach(System.out::println);
