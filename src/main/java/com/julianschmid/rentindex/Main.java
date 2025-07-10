@@ -41,7 +41,7 @@ public class Main {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("VPI data was not downloaded");
+            System.out.println("VPI data was not downloaded this time");
         }
 
         try {
