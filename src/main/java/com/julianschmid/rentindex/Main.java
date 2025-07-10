@@ -51,7 +51,7 @@ public class Main {
             List<Renter> renters = RenterDataLoader.load(overview, buildings);
             VpiService.addVpiToRenters(renters, records);
             RentAdjustService.adjustRent(renters);
-            OverviewWriter.createNewOverview(overview, renters);
+            OverviewWriter.createAdjustmentOverview(overview, renters);
             LetterWriter.createLetters(renters);
 
             renters.forEach(System.out::println);

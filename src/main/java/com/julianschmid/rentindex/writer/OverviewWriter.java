@@ -15,8 +15,8 @@ import java.util.*;
 
 
 public final class OverviewWriter {
-    public static void createNewOverview(String filename, List<Renter> renters) throws IOException {
-        System.out.println("create overview");
+    public static void createAdjustmentOverview(String filename, List<Renter> renters) throws IOException {
+        System.out.println("create adjustment overview");
 
         String path = ResourceUtil.getDataPath();
         try (InputStream is = OverviewWriter.class.getClassLoader().getResourceAsStream(path + filename);
@@ -31,7 +31,9 @@ public final class OverviewWriter {
             // Write new values for each row
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row == null || row.getCell(0) == null || row.getCell(0).getCellType() == CellType.BLANK) continue;
+                if (row == null || row.getCell(0) == null || row.getCell(0).getCellType() == CellType.BLANK) {
+                    continue;
+                }
 
                 Renter renter = renters.get(i - 1); // assuming same order
                 if (!renter.getTenants().getFirst().fullNames().equals(row.getCell(0).toString())) {
@@ -62,9 +64,48 @@ public final class OverviewWriter {
             }
 
             // Write updated workbook to a new file inside target/path
-            filename = filename.substring(0, filename.length() - 5) + "_neu.xlsx";
-            path = "target/" + path;
-            try (OutputStream os = new FileOutputStream(path + filename)) {
+            VpiRecord currentVpi = renters.getFirst().getRentAdjustment().getNewVpi();
+            String outputFilename = String.format(
+                    "Index_Mieterhöhungen_%d_%s.xlsx",
+                    currentVpi.year(),
+                    currentVpi.month());
+            String outputPath = "target/" + path;
+            try (OutputStream os = new FileOutputStream(outputPath + outputFilename)) {
+                workbook.write(os);
+            }
+
+            createNewOverview(path, filename, renters, colMap);
+        }
+    }
+
+    public static void createNewOverview(String path, String filename, List<Renter> renters,
+                                         Map<String, Integer> colMap) throws IOException {
+        System.out.println("create new overview after rent adjustments");
+
+        try (InputStream is = OverviewWriter.class.getClassLoader().getResourceAsStream(path + filename);
+             Workbook workbook = new XSSFWorkbook(is)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+
+            // Write new values for each row
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null || row.getCell(0) == null || row.getCell(0).getCellType() == CellType.BLANK) {
+                    continue;
+                }
+
+                // assuming same order
+                RentAdjustment adjustment = renters.get(i - 1).getRentAdjustment();
+                if (adjustment.isWillAdjustRent()) {
+                    ExcelUtil.setValue(row, "Jahr alt", colMap, adjustment.getNewVpi().year());
+                    ExcelUtil.setValue(row, "Monat alt", colMap, adjustment.getNewVpi().month());
+                    ExcelUtil.setValue(row, "Miete alt", colMap, adjustment.getNewRent());
+                }
+            }
+
+            String outputFilename = "Indexmieten_Übersicht_neu.xlsx";
+            String outputPath = "target/" + path;
+            try (OutputStream os = new FileOutputStream(outputPath + outputFilename)) {
                 workbook.write(os);
             }
         }
