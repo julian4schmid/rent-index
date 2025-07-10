@@ -81,7 +81,7 @@ public final class LetterWriter {
 
                     // location and date
                     ExcelUtil.setValueByCellRef(sheet, "G14",
-                            landlords.getFirst().zipcode().split(" ")[1]);
+                            landlords.getFirst().zipcode().split(" ")[1] + ",");
                     ExcelUtil.setValueByCellRef(sheet, "H14", DateUtil.getDateToday());
 
                     // salutation
@@ -95,6 +95,12 @@ public final class LetterWriter {
 
                     // calculations
                     ExcelUtil.setValueByCellRef(sheet, "G27", adjustment.getOldVpi().value());
+                    String sentenceNewVpi = String.format(
+                            "Preisindex (%s %d):",
+                            adjustment.getOldVpi().month(),
+                            adjustment.getOldVpi().year());
+                    ExcelUtil.setValueByCellRef(sheet, "A27", sentenceNewVpi);
+
                     ExcelUtil.setValueByCellRef(sheet, "G30", adjustment.getNewVpi().value());
                     String sentenceOldVpi = String.format(
                             "Der Preisindex im Monat %s %s (letzter veröffentlichter Indexstand)",
