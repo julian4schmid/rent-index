@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
 
         // VPI data up to date?
-        boolean upToDate = true;
+        boolean upToDate = false;
 
         // check if real data is available
         boolean realData = ResourceUtil.realDataAvailable();
@@ -28,18 +28,20 @@ public class Main {
         // Download VPI data if API token is available and data
         if (realData && !upToDate) {
             try {
+                System.out.println("download VPI data");
                 Properties prop = PropertiesUtil.getProperties("token.properties");
                 String token = prop.getProperty("token");
 
                 VpiDownloader downloader = new VpiDownloader(token);
-                String csvFile = downloader.downloadAndExtractCsv(
+                downloader.downloadAndExtractCsv(
                         "61111-0002",
                         1991,
                         "src/main/resources/download");
-                System.out.println("CSV extracted to: " + csvFile);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            System.out.println("VPI data was not downloaded");
         }
 
         try {
@@ -52,7 +54,6 @@ public class Main {
             OverviewWriter.createNewOverview(overview, renters);
             LetterWriter.createLetters(renters);
 
-            records.forEach(System.out::println);
             renters.forEach(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();

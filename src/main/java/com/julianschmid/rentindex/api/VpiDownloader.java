@@ -23,19 +23,9 @@ public class VpiDownloader {
         this.httpClient = HttpClient.newHttpClient();
     }
 
-    /**
-     * Downloads the zipped flat CSV file for the given table and start year,
-     * saves the zip to disk, unzips it and returns the CSV filename.
-     *
-     * @param tableName Genesis table code, e.g. "61111-0002"
-     * @param startYear start year for data, e.g. 1991
-     * @param outputDir directory where zip and extracted CSV will be saved
-     * @return filename of the extracted CSV file (including path)
-     * @throws IOException          on I/O errors
-     * @throws InterruptedException if HTTP request is interrupted
-     */
-    public String downloadAndExtractCsv(String tableName, int startYear, String outputDir)
+    public void downloadAndExtractCsv(String tableName, int startYear, String outputDir)
             throws IOException, InterruptedException {
+        System.out.println("load VPI data");
 
         // Prepare POST data parameters with flat CSV format and compression
         String postData = "name=" + URLEncoder.encode(tableName, StandardCharsets.UTF_8)
@@ -72,8 +62,6 @@ public class VpiDownloader {
 
         // Delete the zip file after extraction
         Files.delete(zipFilePath);
-
-        return extractedCsv;
     }
 
     /**

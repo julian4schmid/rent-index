@@ -26,6 +26,8 @@ public final class VpiService {
     }
 
     public static void addVpiToRenters(List<Renter> renters, List<VpiRecord> sortedRecords) {
+        System.out.println("attach VPI to renter");
+
         VpiRecord curVpi = getCurrentVpi(sortedRecords);
         for (Renter renter : renters) {
             VpiRecord oldVpi = getPreviousVpi(sortedRecords, renter.getPreviousAdjustment());

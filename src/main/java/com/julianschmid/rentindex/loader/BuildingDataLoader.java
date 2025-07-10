@@ -6,12 +6,14 @@ import com.julianschmid.rentindex.util.PropertiesUtil;
 
 import java.util.*;
 
-public class BuildingDataLoader {
+public final class BuildingDataLoader {
 
     private BuildingDataLoader() {
     }
 
     public static Map<String, Building> load(String filename) {
+        System.out.println("load building data");
+
         Properties props = PropertiesUtil.getProperties(filename);
 
         // store landlord information

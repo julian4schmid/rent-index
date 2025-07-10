@@ -14,8 +14,10 @@ import java.io.OutputStream;
 import java.util.*;
 
 
-public class OverviewWriter {
+public final class OverviewWriter {
     public static void createNewOverview(String filename, List<Renter> renters) throws IOException {
+        System.out.println("create overview");
+
         String path = ResourceUtil.getDataPath();
         try (InputStream is = OverviewWriter.class.getClassLoader().getResourceAsStream(path + filename);
              Workbook workbook = new XSSFWorkbook(is)) {

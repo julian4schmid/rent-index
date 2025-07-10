@@ -94,6 +94,8 @@ public final class RentAdjustService {
     }
 
     public static void adjustRent(List<Renter> renters) {
+        System.out.println("calculate rent adjustment");
+
         for (Renter renter : renters) {
             adjustRent(renter);
         }

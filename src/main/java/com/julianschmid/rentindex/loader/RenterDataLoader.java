@@ -18,6 +18,8 @@ public final class RenterDataLoader {
     }
 
     public static List<Renter> load(String filename, Map<String, Building> buildings) throws IOException {
+        System.out.println("load renter data");
+
         String path = ResourceUtil.getDataPath();
         List<Renter> renters = new ArrayList<>();
 

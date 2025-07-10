@@ -18,8 +18,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-public class LetterWriter {
+public final class LetterWriter {
     public static void createLetters(List<Renter> renters) throws IOException {
+        System.out.println("create letters");
+
         String path = "template/";
         String templateFile = "Anschreiben_Vorlage.xlsx";
 
