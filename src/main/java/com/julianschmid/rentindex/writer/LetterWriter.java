@@ -7,23 +7,27 @@ import com.julianschmid.rentindex.model.Tenant;
 import com.julianschmid.rentindex.util.DateUtil;
 import com.julianschmid.rentindex.util.ExcelUtil;
 import com.julianschmid.rentindex.util.MathUtil;
+import com.julianschmid.rentindex.util.ResourceUtil;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public class LetterWriter {
-    public static void createLetters(String filename, List<Renter> renters) throws IOException {
-        String path = "template";
+    public static void createLetters(List<Renter> renters) throws IOException {
+        String path = "template/";
         String templateFile = "Anschreiben_Vorlage.xlsx";
 
         for (Renter renter : renters) {
             // create letter only if we adjust the rent
             if (renter.getRentAdjustment().isWillAdjustRent()) {
-                try (InputStream is = LetterWriter.class.getClassLoader().getResourceAsStream(path + filename);
+                try (InputStream is = LetterWriter.class.getClassLoader()
+                        .getResourceAsStream(path + templateFile);
                      Workbook workbook = new XSSFWorkbook(is)) {
 
                     Sheet sheet = workbook.getSheetAt(0);
@@ -43,8 +47,9 @@ public class LetterWriter {
                             tenant1.salutation()
                     );
                     if (tenant2 != null) {
-                        outputFilename += String.format("%s.xlsx", tenant2.salutation());
+                        outputFilename += tenant2.salutation();
                     }
+                    outputFilename += ".xlsx";
 
 
                     // landlord information
@@ -79,10 +84,10 @@ public class LetterWriter {
 
                     // salutation
                     StringBuilder salutation = new StringBuilder(tenant1.woman() ? "Sehr geehrte Frau " : "Sehr geehrter Herr ");
-                    salutation.append(tenant1.salutation());
+                    salutation.append(tenant1.salutation()).append(",");
                     if (tenant2 != null) {
-                        salutation.append(tenant2.woman() ? ", Sehr geehrte Frau " : ", Sehr geehrter Herr ");
-                        salutation.append(tenant2.salutation());
+                        salutation.append(tenant2.woman() ? " Sehr geehrte Frau " : " Sehr geehrter Herr ");
+                        salutation.append(tenant2.salutation()).append(",");
                     }
                     ExcelUtil.setValueByCellRef(sheet, "A18", salutation.toString());
 
@@ -91,8 +96,8 @@ public class LetterWriter {
                     ExcelUtil.setValueByCellRef(sheet, "G30", adjustment.getNewVpi().value());
                     String sentenceOldVpi = String.format(
                             "Der Preisindex im Monat %s %s (letzter veröffentlichter Indexstand)",
-                            adjustment.getOldVpi().month(),
-                            adjustment.getOldVpi().year());
+                            adjustment.getNewVpi().month(),
+                            adjustment.getNewVpi().year());
                     ExcelUtil.setValueByCellRef(sheet, "A29", sentenceOldVpi);
                     ExcelUtil.setValueByCellRef(sheet, "A36", adjustment.getNewVpi().value());
                     ExcelUtil.setValueByCellRef(sheet, "C36", adjustment.getOldVpi().value());
@@ -100,9 +105,9 @@ public class LetterWriter {
                     ExcelUtil.setValueByCellRef(sheet, "E36", adjustment.getPercentPossible());
 
                     // not maximum
-                    if (adjustment.getPercentIncrease() < adjustment.getPercentPossible()) {
+                    if (adjustment.getPercentIncrease() + 0.4 < adjustment.getPercentPossible()) {
                         String notMaximumIncrease = String.format(
-                                "Wir haben beschlossen, die Miete stattdessen um %s zu erhöhen.",
+                                "Wir haben beschlossen, die Miete um %s zu erhöhen.",
                                 MathUtil.formatPercentChange(adjustment.getPercentIncrease()));
                         ExcelUtil.setValueByCellRef(sheet, "A37", notMaximumIncrease);
                     }
@@ -113,6 +118,7 @@ public class LetterWriter {
 
                     // additional costs
                     double costs = renter.getOperatingCosts() + renter.getHeatingCosts();
+                    ExcelUtil.setValueByCellRef(sheet, "H42", costs);
                     if (renter.getHeatingCosts() > 0) {
                         String mentionHeating = "Zuzüglich Heiz- und Betriebskostenvorauszahlung";
                         String mentionHeating2 = "Ihre künftige Miete inkl. Heiz - und Betriebskostenvorauszahlung:";
@@ -135,6 +141,12 @@ public class LetterWriter {
                         landlordsString += " und " + landlord2.name();
                     }
                     ExcelUtil.setValueByCellRef(sheet, "A52", landlordsString);
+
+                    // save Excel file
+                    String outputPath = "target/" + ResourceUtil.getDataPath();
+                    try (OutputStream os = new FileOutputStream(outputPath + outputFilename)) {
+                        workbook.write(os);
+                    }
                 }
             }
         }

@@ -7,6 +7,7 @@ import com.julianschmid.rentindex.loader.VpiDataLoader;
 import com.julianschmid.rentindex.model.*;
 import com.julianschmid.rentindex.service.*;
 import com.julianschmid.rentindex.util.*;
+import com.julianschmid.rentindex.writer.LetterWriter;
 import com.julianschmid.rentindex.writer.OverviewWriter;
 
 import java.util.Map;
@@ -49,6 +50,7 @@ public class Main {
             VpiService.addVpiToRenters(renters, records);
             RentAdjustService.adjustRent(renters);
             OverviewWriter.createNewOverview(overview, renters);
+            LetterWriter.createLetters(renters);
 
             records.forEach(System.out::println);
             renters.forEach(System.out::println);
