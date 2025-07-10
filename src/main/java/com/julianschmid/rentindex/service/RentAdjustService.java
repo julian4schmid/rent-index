@@ -81,12 +81,15 @@ public final class RentAdjustService {
 
             double oldVpiVal = adjustment.getOldVpi().value();
             double newVpiVal = adjustment.getNewVpi().value();
-            double newRentPerSqm = renter.getPreviousAdjustment().rentPerSqm();
-            newRentPerSqm *= newVpiVal / oldVpiVal;
-            newRentPerSqm = Math.min(newRentPerSqm, adjustment.getSelfSetRentLimit());
 
-            adjustment.setNewRentPerSqm(MathUtil.roundWithDecimals(newRentPerSqm, 2));
-            adjustment.setNewRent((int) Math.floor(newRentPerSqm * renter.getApartment().sqm()));
+            double newRent = renter.getPreviousAdjustment().rent() * (newVpiVal / oldVpiVal);
+            if (adjustment.getSelfSetRentLimit() * renter.getApartment().sqm() < newRent) {
+                newRent = adjustment.getSelfSetRentLimit() * renter.getApartment().sqm();
+            }
+            double newRentPerSqm = MathUtil.roundWithDecimals(newRent / renter.getApartment().sqm(), 2);
+
+            adjustment.setNewRent((int) Math.floor(newRent));
+            adjustment.setNewRentPerSqm(newRentPerSqm);
             adjustment.setRentDifference(adjustment.getNewRent() - renter.getPreviousAdjustment().rent());
             adjustment.setPercentIncrease(MathUtil.calculatePercentChange(
                     adjustment.getNewRent() / renter.getPreviousAdjustment().rent()));
