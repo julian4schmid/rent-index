@@ -12,14 +12,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 
 public final class LetterWriter {
-    public static void createLetters(List<Renter> renters) throws IOException {
+    public static void createLetters(List<Renter> renters, boolean createPdf) throws IOException {
         System.out.println("create letters");
 
         String path = "template/";
@@ -155,9 +152,45 @@ public final class LetterWriter {
                     try (OutputStream os = new FileOutputStream(outputPath + outputFilename)) {
                         workbook.write(os);
                     }
+
+                    if (createPdf) {
+                        // save PDF file
+                        int exitCode = saveToPdf(outputPath, outputFilename);
+                        if (exitCode != 0) {
+                            throw new RuntimeException("LibreOffice conversion failed with exit code " + exitCode);
+                        }
+                    }
                 }
             }
         }
 
+    }
+
+    private static int saveToPdf(String outputPath, String outputFilename) {
+        String libreOfficeCommand = "soffice"; // must be in PATH
+
+        try {
+            ProcessBuilder pb = new ProcessBuilder(
+                    libreOfficeCommand,
+                    "--headless",
+                    "--invisible",
+                    "--norestore",
+                    "--nolockcheck",
+                    "--convert-to", "pdf",
+                    outputFilename
+            );
+            pb.directory(new File(outputPath));
+            pb.inheritIO();
+
+            Process process = pb.start();
+            return process.waitFor(); // return exit code (0 = success)
+        } catch (IOException e) {
+            System.err.println("IO error during PDF conversion: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.err.println("PDF conversion interrupted: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+
+        return -1;
     }
 }

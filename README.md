@@ -6,7 +6,7 @@ This Java application automates the process of:
 - Loading renter and landlord data from Excel and property files
 - Calculating rent adjustments based on VPI and self set limits
 - Generating an Excel summary 
-- Generating letters based on an Excel template
+- Generating letters based on an Excel template (to Excel and PDF)
 - Hiding real data locally, providing sample data
 
 ---

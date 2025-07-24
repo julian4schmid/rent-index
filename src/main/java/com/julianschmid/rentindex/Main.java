@@ -20,6 +20,8 @@ public class Main {
 
         // VPI data up to date?
         boolean upToDate = false;
+        // for PDF creation to work, LibreOffice needs to be in the PATH
+        boolean createPdf = true;
 
         // check if real data is available
         boolean realData = ResourceUtil.realDataAvailable();
@@ -52,7 +54,7 @@ public class Main {
             VpiService.addVpiToRenters(renters, records);
             RentAdjustService.adjustRent(renters);
             OverviewWriter.createAdjustmentOverview(overview, renters);
-            LetterWriter.createLetters(renters);
+            LetterWriter.createLetters(renters, createPdf);
 
             renters.forEach(System.out::println);
         } catch (Exception e) {
