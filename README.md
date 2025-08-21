@@ -1,4 +1,4 @@
-# Index Rent Adjustment Tool
+# Index Rent Adjustment Tool (German)
 
 ## Overview
 This Java application automates the process of:
